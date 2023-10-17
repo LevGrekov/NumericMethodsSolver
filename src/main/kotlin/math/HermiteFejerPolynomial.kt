@@ -29,6 +29,8 @@ class HermiteFejerPolynomial(lagrangePoly : LagrangePolynomial): Polynomial() {
         val polyWithABCDE =
             Polynomial(1.0 ,1.0 ,1.0 ,1.0 ,1.0 )
 
+
+
         val H = findMultiplicationXminXi().derivative(1)
     }
 
