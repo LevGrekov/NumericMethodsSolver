@@ -1,5 +1,5 @@
 package ru.levgrekov.polynomial.ru.levgrekov.polynomial.math
-import ru.levgrekov.polynomial.math.Polynomial
+import math.Polynomial
 
 class LagrangePolynomial(points: Map<Double,Double>,val fileName: String) : Polynomial() {
     private val _points: MutableMap<Double, Double>

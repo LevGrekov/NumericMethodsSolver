@@ -1,6 +1,7 @@
-package ru.levgrekov.polynomial.math
+package math
 
 import ru.levgrekov.polynomial.ru.levgrekov.polynomial.math.eq
+import ru.levgrekov.polynomial.ru.levgrekov.polynomial.math.factorial
 import ru.levgrekov.polynomial.ru.levgrekov.polynomial.math.neq
 import kotlin.math.abs
 import kotlin.math.pow
@@ -77,7 +78,7 @@ open class Polynomial(coeffs: Map<Int, Double>) {
             putAll(c)
         }
     }
-    private fun divide(divisor: Polynomial): Pair<Polynomial,Polynomial> {
+    private fun divide(divisor: Polynomial): Pair<Polynomial, Polynomial> {
 
         if(divisor.coeffs[0] == 0.0) throw  ArithmeticException("forbidden to divide by zero");
 
@@ -95,15 +96,27 @@ open class Polynomial(coeffs: Map<Int, Double>) {
             }
         }
 
-        return Pair(Polynomial(quotient),Polynomial(remainder))
+        return Pair(Polynomial(quotient), Polynomial(remainder))
     }
-    operator fun rem(other:Polynomial) = divide(other).second;
+    operator fun rem(other: Polynomial) = divide(other).second;
     operator fun div(other: Polynomial) = divide(other).first;
 
     // Как функция
 
     operator fun invoke(scalar: Double) = _coeffs.entries.sumOf { (k, v) -> v * scalar.pow(k) }
     operator fun get(degree: Int) = _coeffs[degree] ?: 0.0
+
+    fun derivative(derivOrder: Int): Polynomial {
+        if (derivOrder == 0) return this
+
+        val derivativeCoeffs = mutableMapOf<Int, Double>()
+        for ((exp, coeff) in _coeffs) {
+            if (exp >= derivOrder) {
+                derivativeCoeffs[exp - derivOrder] = coeff * factorial(exp) / factorial(exp - derivOrder)
+            }
+        }
+        return Polynomial(derivativeCoeffs).derivative(derivOrder - 1)
+    }
 
     //Переопределение Any
 

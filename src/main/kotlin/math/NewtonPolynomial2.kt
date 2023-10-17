@@ -1,8 +1,8 @@
 package ru.levgrekov.polynomial.ru.levgrekov.polynomial.math
 
-import ru.levgrekov.polynomial.math.Polynomial
+import math.Polynomial
 
-class NewtonPolynomial2(points: Map<Double,Double>) : Polynomial() {
+class NewtonPolynomial2(points: Map<Double,Double>,val fileName: String) : Polynomial() {
 
     private val n: Int
         get() = _points.size
@@ -29,7 +29,26 @@ class NewtonPolynomial2(points: Map<Double,Double>) : Polynomial() {
     }
     fun addPoint(x: Double, f: Double) {
         _points.add(Pair(x, f))
-        this += fundPoly(n) * dividedDifference(n - 1)
+
+        val dd = dividedDifference(n - 1)
+        val expressionDD = buildString {
+            append("f(")
+            for (i in 1..n) {
+                append("x$i ")
+            }
+            append(")")
+        }
+        writeTextToFile("$expressionDD = $dd",fileName)
+
+        val expressionfp = buildString {
+            for (i in 1..<n) {
+                append("(x - x$i)")
+            }
+        }
+        val fp = fundPoly(n)
+        writeTextToFile("$expressionfp = $fp",fileName)
+        this += fp * dd
+        writeTextToFile("",fileName)
     }
     fun addPoints( pointsList: List<Pair<Double,Double>>) =
         pointsList.forEach{this.addPoint(it.first,it.second)}
