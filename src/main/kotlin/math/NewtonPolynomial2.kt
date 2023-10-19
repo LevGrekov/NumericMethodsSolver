@@ -20,7 +20,6 @@ class NewtonPolynomial2(points: Map<Double,Double>,val fileName: String) : Polyn
         }
         return lastFundPoly
     }
-
     private fun dividedDifference(k: Int): Double = (0..k).sumOf { j ->
         val multiplication = (0..k)
             .filter { i -> i != j }

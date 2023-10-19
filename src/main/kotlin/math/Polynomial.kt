@@ -102,20 +102,19 @@ open class Polynomial(coeffs: Map<Int, Double>) {
     operator fun div(other: Polynomial) = divide(other).first;
 
     // Как функция
-
-    operator fun invoke(scalar: Double) = _coeffs.entries.sumOf { (k, v) -> v * scalar.pow(k) }
     operator fun get(degree: Int) = _coeffs[degree] ?: 0.0
-
+    operator fun invoke(scalar: Double) =
+        _coeffs.entries.sumOf { (k, v) -> v * scalar.pow(k) }
     fun derivative(derivOrder: Int): Polynomial {
-        if (derivOrder == 0) return this
-
         val derivativeCoeffs = mutableMapOf<Int, Double>()
         for ((exp, coeff) in _coeffs) {
             if (exp >= derivOrder) {
-                derivativeCoeffs[exp - derivOrder] = coeff * factorial(exp) / factorial(exp - derivOrder)
+                val newExp = exp - derivOrder
+                val newCoeff = coeff * factorial(exp) / factorial(newExp)
+                derivativeCoeffs[newExp] = newCoeff
             }
         }
-        return Polynomial(derivativeCoeffs).derivative(derivOrder - 1)
+        return Polynomial(derivativeCoeffs)
     }
 
     //Переопределение Any
@@ -126,46 +125,18 @@ open class Polynomial(coeffs: Map<Int, Double>) {
         return this._coeffs == other._coeffs
     }
     override fun hashCode(): Int = _coeffs.keys.hashCode() * 17 + _coeffs.values.hashCode() * 31
-//    override fun toString() = buildString {
-//
-//        _coeffs.toSortedMap(reverseOrder()).forEach { (degree, value) ->
-//            this.append(when {
-//                value < 0 -> " - "
-//                value > 0 && degree != highDegree -> " + "
-//                else -> ""
-//            })
-//
-//            this.append(
-//                when (value) {
-//                    1.0 -> ""
-//                    else -> "${abs(value)}"
-//                }
-//            )
-//
-//            this.append(
-//                when (degree) {
-//                    0 -> ""
-//                    1 -> "x"
-//                    else -> "x^$degree"
-//                }
-//            )
-//        }
-//    }
 
     override fun toString() = toString("x")
 
-    fun toString(arg:String) = buildString {
-
-        _coeffs.toSortedMap(reverseOrder()).forEach { (k, v) ->
-            append(if (v > 0.0 || v.eq(0.0, 1e-12)) if (_coeffs.keys.max() == k) "" else "+" else "-")
-            if (abs(v) neq 1.0 || k == 0 ) append(abs(v))
-            if(k > 0) {
-                append(arg)
+    fun toString(variable: String) = _coeffs.toSortedMap(reverseOrder()).map{ (k, v) ->
+        buildString {
+            if (v.neq(0.0, 1e-12)) {
+                append(if (v > 0.0 || v.eq(0.0, 1e-12)) if (k != _coeffs.keys.max()) "+" else "" else "-")
+                if (abs(v) neq 1.0 || k == 0) append(abs(v))
+                if (k != 0) append(variable)
                 if (k > 1) append("^$k")
             }
-        } //sort by key
-
-    }
-
+        }
+    }.joinToString("")
 
 }

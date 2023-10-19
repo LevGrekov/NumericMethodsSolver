@@ -36,3 +36,10 @@ fun factorial(n: Int): Int {
     }
     return result
 }
+
+fun calculateDerivativeAtPoint(
+    f: (Double) -> Double,
+    x: Double,
+    h: Double = 1e-5): Double
+        = (f(x + h) - f(x - h)) / (2 * h)
+

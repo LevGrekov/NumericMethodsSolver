@@ -22,13 +22,20 @@ class LagrangePolynomial(points: Map<Double,Double>,val fileName: String) : Poly
 
         for ((x, fx) in _points.entries) {
             val fundamentalPoly = createFundamentalPoly(x)
-            writeTextToFile("Фундаментальный полином l$i = $fundamentalPoly",fileName)
             val fundamentalPolyMY = fundamentalPoly * fx
-            writeTextToFile("l$i * $fx = $fundamentalPolyMY \n",fileName)
+            writeTextToFile("l$i * y$i = $fundamentalPolyMY \n",fileName)
             result += fundamentalPolyMY
             i++
         }
         writeTextToFile("\nКонечный полином : $result \n",fileName)
+        return result
+    }
+
+    fun findW() : Polynomial {
+        val result = Polynomial(1.0)
+        points.keys.forEach {
+            result *= Polynomial(-it, 1.0)
+        }
         return result
     }
 
@@ -42,5 +49,4 @@ class LagrangePolynomial(points: Map<Double,Double>,val fileName: String) : Poly
         }
         return acc
     }
-
 }
