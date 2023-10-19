@@ -79,6 +79,7 @@ class TestWorkOnNumericalMethods(val a: Double, val b: Double, val ownFunction: 
         val H9 = lagrange + w * H4
         writeTextToFile("H4 = $H4",fileName)
         writeTextToFile("H9 = $H9",fileName)
+        println(H9)
         writeTextToFile("Вычисляем погрешности",fileName)
         for (i in controlPoints.keys){
             val xInControlPoint = H9(controlPoints[i]!!)

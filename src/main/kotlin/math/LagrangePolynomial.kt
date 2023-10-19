@@ -39,7 +39,6 @@ class LagrangePolynomial(points: Map<Double,Double>,val fileName: String) : Poly
         return result
     }
 
-
     private fun createFundamentalPoly(xk: Double): Polynomial {
         val acc = Polynomial(1.0)
         for (it in _points.keys) {
